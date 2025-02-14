@@ -19,3 +19,95 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* CSS personnalisé pour centrer la modal */
+.modal-overlay {
+  position: fixed; /* Pour être positionnée par-dessus le canvas */
+  top: 50%; /* Centrer verticalement */
+  left: 50%; /* Centrer horizontalement */
+  transform: translate(-50%, -50%); /* Déplacer pour parfaitement centrer */
+  z-index: 9999; /* Assurer que la modal soit au-dessus du canvas */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-overlay {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.modal-overlay.visible {
+  opacity: 1;
+}
+
+
+.infoModal {
+  position: absolute;
+  z-index: 9999;
+  left: 50%;
+  top: 50%;
+  background-color: rgba(255,255,255,0.1);
+  width: 50%;
+  height: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/*modal entrée */
+
+.futuristic-modal {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  max-width: 300px;
+  width: 100%;
+  z-index: 50;
+  font-family: 'Arial', sans-serif;
+}
+
+.futuristic-modal h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.futuristic-modal p {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.futuristic-modal ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 20px;
+}
+
+.futuristic-modal li {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.futuristic-modal button {
+  background-color: #6600ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.futuristic-modal button:hover {
+  background-color: #5a00cc;
+}
