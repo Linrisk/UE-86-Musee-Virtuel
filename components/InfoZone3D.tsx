@@ -15,7 +15,7 @@ interface InfoZone3DProps {
 const InfoZone3D: React.FC<InfoZone3DProps> = ({ position, title, yearRange, description, image, onClick }) => {
   const [hovered, setHovered] = useState(false);
 
-  // Animation au survol
+
   const { scale } = useSpring({
     scale: hovered ? 1.1 : 1,
   });

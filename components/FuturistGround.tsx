@@ -15,10 +15,10 @@ const FuturisticGround: React.FC = () => {
       throw new Error('Unable to get 2D context');
     }
 
-    // Fond transparent
+   
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Grille perspective
+   
     const drawLine = (x1: number, y1: number, x2: number, y2: number) => {
       context.beginPath();
       context.moveTo(x1, y1);
@@ -26,11 +26,10 @@ const FuturisticGround: React.FC = () => {
       context.stroke();
     };
 
-    // Style des lignes principales
-    context.strokeStyle = '#6600ff'; // Violet plus brillant
+   
+    context.strokeStyle = '#6600ff'; 
     context.lineWidth = 3;
 
-    // Lignes horizontales en perspective
     const horizonY = canvas.height * 0.5;
     const vanishingPointX = canvas.width * 0.5;
     const numLines = 20;
@@ -38,16 +37,15 @@ const FuturisticGround: React.FC = () => {
 
     for (let i = 0; i <= numLines; i++) {
       const y = horizonY + (i * spacing);
-      // Ligne horizontale
+      
       drawLine(0, y, canvas.width, y);
 
-      // Lignes convergentes
+     
       const startX = (i * canvas.width) / numLines;
       drawLine(startX, canvas.height, vanishingPointX, horizonY);
       drawLine(canvas.width - startX, canvas.height, vanishingPointX, horizonY);
     }
 
-    // Effet de lueur
     const gradient = context.createLinearGradient(0, canvas.height, 0, horizonY);
     gradient.addColorStop(0, 'rgba(102, 0, 255, 0.4)');
     gradient.addColorStop(1, 'rgba(102, 0, 255, 0)');
@@ -71,7 +69,7 @@ const FuturisticGround: React.FC = () => {
 
   return (
     <group>
-      {/* Sol principal avec effet de grille */}
+    
       <mesh ref={meshRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <planeGeometry args={[100, 100, 32, 32]} />
         <meshStandardMaterial
@@ -84,7 +82,6 @@ const FuturisticGround: React.FC = () => {
         />
       </mesh>
 
-      {/* Couche de lueur additionnelle */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}>
         <planeGeometry args={[100, 100]} />
         <meshBasicMaterial
@@ -95,7 +92,7 @@ const FuturisticGround: React.FC = () => {
         />
       </mesh>
 
-      {/* Lumières dynamiques */}
+      
       <pointLight position={[10, 10, 10]} color="#6600ff" intensity={0.5} />
       <pointLight position={[-10, 10, -10]} color="#6600ff" intensity={0.5} />
     </group>

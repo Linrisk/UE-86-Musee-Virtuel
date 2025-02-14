@@ -77,7 +77,7 @@ function Experience({ setModalContent, roverRef, infoZones }: ExperienceProps) {
     description={data.description}
     image={data.image}
     yearRange={data.yearRange}
-    onClick={() => setModalContent(data)} // data already matches ModalContent
+    onClick={() => setModalContent(data)} 
   />
 ))}
 
@@ -115,7 +115,7 @@ export default function Scene() {
       <Canvas camera={{ position: [0, 1.2, 5], fov: 50 }}>
         <Suspense fallback={null}>
           <Experience
-             setModalContent={setModalContent} // This should match the correct function type in Experience
+             setModalContent={setModalContent}
              roverRef={roverRef} 
              infoZones={infoZones}
           />

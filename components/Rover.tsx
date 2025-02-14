@@ -32,17 +32,15 @@ const Rover: React.FC<RoverProps> = ({ setModalContent, roverRef, infoZones }) =
   });
   const [currentZone, setCurrentZone] = useState<{ position: [number, number, number]; message: string } | null>(null);
 
-  // Gestion des événements de clavier
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (keys.current.hasOwnProperty(e.key)) {
         keys.current[e.key] = true;
       }
       if (e.key === " " && currentZone) {
-        // Envoie un objet qui correspond au type ModalContent
         setModalContent({
-          title: "Zone Information", // Titre dynamique ou personnalisé
-          description: currentZone.message, // Message de la zone proche
+          title: "Zone Information", 
+          description: currentZone.message, 
         });
       }
     };
@@ -53,21 +51,17 @@ const Rover: React.FC<RoverProps> = ({ setModalContent, roverRef, infoZones }) =
       }
     };
 
-    // Ajouter les écouteurs d'événements
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keyup", handleKeyUp);
 
-    // Nettoyage des écouteurs d'événements lors du démontage du composant
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
   }, [currentZone, setModalContent]);
 
-  // Mise à jour de la position et de la rotation du rover dans la scène
   useFrame(() => {
     if (roverRef.current) {
-      // Déplacement en avant et en arrière
       if (keys.current.ArrowUp) {
         roverRef.current.position.x += Math.sin(roverRef.current.rotation.y) * speed;
         roverRef.current.position.z += Math.cos(roverRef.current.rotation.y) * speed;
@@ -77,7 +71,7 @@ const Rover: React.FC<RoverProps> = ({ setModalContent, roverRef, infoZones }) =
         roverRef.current.position.z -= Math.cos(roverRef.current.rotation.y) * speed;
       }
       
-      // Rotation gauche et droite
+     
       if (keys.current.ArrowLeft) {
         roverRef.current.rotation.y += rotationSpeed;
       }
@@ -85,7 +79,6 @@ const Rover: React.FC<RoverProps> = ({ setModalContent, roverRef, infoZones }) =
         roverRef.current.rotation.y -= rotationSpeed;
       }
 
-      // Vérifier la proximité des zones d'information
       let nearestZone = null;
       let minDistance = Number.POSITIVE_INFINITY;
       infoZones.forEach((zone) => {
@@ -98,7 +91,6 @@ const Rover: React.FC<RoverProps> = ({ setModalContent, roverRef, infoZones }) =
         }
       });
 
-      // Mise à jour de la zone la plus proche
       setCurrentZone(nearestZone);
     }
   });
