@@ -5,7 +5,7 @@ import * as THREE from 'three';
 const FuturisticGround: React.FC = () => {
   const meshRef = useRef<THREE.Mesh>(null);
 
-  const createFuturisticTexture = (): HTMLCanvasElement => {
+  const createGridTexture = (): HTMLCanvasElement => {
     const canvas = document.createElement('canvas');
     canvas.width = 1024;
     canvas.height = 1024;
@@ -15,84 +15,58 @@ const FuturisticGround: React.FC = () => {
       throw new Error('Unable to get 2D context');
     }
 
-   
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-   
-    const drawLine = (x1: number, y1: number, x2: number, y2: number) => {
+    context.strokeStyle = '#6600ff';
+    context.lineWidth = 2;
+    context.globalAlpha = 0.8;
+
+    const gridSize = 120;
+
+    for (let x = 0; x <= canvas.width; x += gridSize) {
       context.beginPath();
-      context.moveTo(x1, y1);
-      context.lineTo(x2, y2);
+      context.moveTo(x, 0);
+      context.lineTo(x, canvas.height);
       context.stroke();
-    };
-
-   
-    context.strokeStyle = '#6600ff'; 
-    context.lineWidth = 3;
-
-    const horizonY = canvas.height * 0.5;
-    const vanishingPointX = canvas.width * 0.5;
-    const numLines = 20;
-    const spacing = canvas.height / numLines;
-
-    for (let i = 0; i <= numLines; i++) {
-      const y = horizonY + (i * spacing);
-      
-      drawLine(0, y, canvas.width, y);
-
-     
-      const startX = (i * canvas.width) / numLines;
-      drawLine(startX, canvas.height, vanishingPointX, horizonY);
-      drawLine(canvas.width - startX, canvas.height, vanishingPointX, horizonY);
     }
 
-    const gradient = context.createLinearGradient(0, canvas.height, 0, horizonY);
-    gradient.addColorStop(0, 'rgba(102, 0, 255, 0.4)');
-    gradient.addColorStop(1, 'rgba(102, 0, 255, 0)');
-    context.fillStyle = gradient;
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    for (let y = 0; y <= canvas.height; y += gridSize) {
+      context.beginPath();
+      context.moveTo(0, y);
+      context.lineTo(canvas.width, y);
+      context.stroke();
+    }
 
     return canvas;
   };
 
   useEffect(() => {
-    const texture = new THREE.CanvasTexture(createFuturisticTexture());
+    const texture = new THREE.CanvasTexture(createGridTexture());
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(4, 4);
+    texture.repeat.set(10, 10);
+
     if (meshRef.current) {
       const material = meshRef.current.material as THREE.MeshStandardMaterial;
       material.map = texture;
-      material.needsUpdate = true;
+      material.map.needsUpdate = true;
     }
   }, []);
 
   return (
     <group>
-    
       <mesh ref={meshRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-        <planeGeometry args={[100, 100, 32, 32]} />
+        <planeGeometry args={[100, 100, 1, 1]} />
         <meshStandardMaterial
           transparent={true}
-          opacity={0.7}
+          opacity={0.9}
           emissive="#6600ff"
           emissiveIntensity={0.5}
-          metalness={0.9}
-          roughness={0.1}
+          metalness={0.8}
+          roughness={0.2}
         />
       </mesh>
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}>
-        <planeGeometry args={[100, 100]} />
-        <meshBasicMaterial
-          color="#6600ff"
-          transparent={true}
-          opacity={0.1}
-          blending={THREE.AdditiveBlending}
-        />
-      </mesh>
-
-      
       <pointLight position={[10, 10, 10]} color="#6600ff" intensity={0.5} />
       <pointLight position={[-10, 10, -10]} color="#6600ff" intensity={0.5} />
     </group>

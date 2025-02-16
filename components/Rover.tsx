@@ -18,36 +18,37 @@ interface RoverProps {
   infoZones: Array<{ position: [number, number, number]; message: string }>;
 }
 
-
 const Rover: React.FC<RoverProps> = ({ setModalContent, roverRef, infoZones }) => {
   const { scene } = useGLTF("/robot.glb");
   const speed = 0.2;
   const rotationSpeed = 0.05;
   const keys = useRef<{ [key: string]: boolean }>({
-    ArrowUp: false,
-    ArrowDown: false,
-    ArrowLeft: false,
-    ArrowRight: false,
+    z: false,
+    s: false,
+    q: false,
+    d: false,
     " ": false,
   });
   const [currentZone, setCurrentZone] = useState<{ position: [number, number, number]; message: string } | null>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (keys.current.hasOwnProperty(e.key)) {
-        keys.current[e.key] = true;
+      const key = e.key.toLowerCase();
+      if (keys.current.hasOwnProperty(key)) {
+        keys.current[key] = true;
       }
       if (e.key === " " && currentZone) {
         setModalContent({
-          title: "Zone Information", 
-          description: currentZone.message, 
+          title: "Zone Information",
+          description: currentZone.message,
         });
       }
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
-      if (keys.current.hasOwnProperty(e.key)) {
-        keys.current[e.key] = false;
+      const key = e.key.toLowerCase();
+      if (keys.current.hasOwnProperty(key)) {
+        keys.current[key] = false;
       }
     };
 
@@ -62,20 +63,19 @@ const Rover: React.FC<RoverProps> = ({ setModalContent, roverRef, infoZones }) =
 
   useFrame(() => {
     if (roverRef.current) {
-      if (keys.current.ArrowUp) {
+      if (keys.current.z) {
         roverRef.current.position.x += Math.sin(roverRef.current.rotation.y) * speed;
         roverRef.current.position.z += Math.cos(roverRef.current.rotation.y) * speed;
       }
-      if (keys.current.ArrowDown) {
+      if (keys.current.s) {
         roverRef.current.position.x -= Math.sin(roverRef.current.rotation.y) * speed;
         roverRef.current.position.z -= Math.cos(roverRef.current.rotation.y) * speed;
       }
-      
-     
-      if (keys.current.ArrowLeft) {
+
+      if (keys.current.q) {
         roverRef.current.rotation.y += rotationSpeed;
       }
-      if (keys.current.ArrowRight) {
+      if (keys.current.d) {
         roverRef.current.rotation.y -= rotationSpeed;
       }
 
