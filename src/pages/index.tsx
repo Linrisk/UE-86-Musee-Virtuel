@@ -7,9 +7,9 @@ import InfoModal from "../../components/InfoModal";
 import InfoZone3D from "../../components/InfoZone3D";
 import FuturistGround from "../../components/FuturistGround";
 import InstructionsModal from "../../components/InstructionsModal";
-import * as THREE from 'three';
-import { OrbitControls } from '@react-three/drei';
-import PlanetariumHall from '../../components/HallPiece';
+import * as THREE from "three";
+import { OrbitControls } from "@react-three/drei";
+import PlanetariumHall from "../../components/HallPiece";
 
 interface InfoZoneData {
   position: [number, number, number];
@@ -30,7 +30,9 @@ interface ExperienceProps {
 }
 
 function Experience({ setModalContent, roverRef, infoZones }: ExperienceProps) {
-  const discoveryData: (ModalContent & { position: [number, number, number] })[] = [
+  const discoveryData: (ModalContent & {
+    position: [number, number, number];
+  })[] = [
     {
       position: [15, 1, 15],
       title: "Le Cratère Gale",
@@ -84,7 +86,12 @@ function Experience({ setModalContent, roverRef, infoZones }: ExperienceProps) {
         />
       ))}
 
-      <Rover setModalContent={setModalContent} roverRef={roverRef} infoZones={infoZones} position={[0, 0, 0]} />
+      <Rover
+        setModalContent={setModalContent}
+        roverRef={roverRef}
+        infoZones={infoZones}
+        position={[0, 0, 0]}
+      />
 
       <ThirdPersonCamera target={roverRef} />
 
@@ -99,8 +106,16 @@ export default function Scene() {
   const [showInstructions, setShowInstructions] = useState(true);
 
   const infoZones: InfoZoneData[] = [
-    { position: [10, 0.1, 10], message: "Bienvenue sur Mars ! Cette zone regorge de secrets à découvrir." },
-    { position: [-10, 0.1, -10], message: "Regardez ce cratère ! Il témoigne de l'histoire mouvementée de Mars." },
+    {
+      position: [10, 0.1, 10],
+      message:
+        "Bienvenue sur Mars ! Cette zone regorge de secrets à découvrir.",
+    },
+    {
+      position: [-10, 0.1, -10],
+      message:
+        "Regardez ce cratère ! Il témoigne de l'histoire mouvementée de Mars.",
+    },
   ];
 
   return (
@@ -120,13 +135,21 @@ export default function Scene() {
           target={[0, 0, 0]}
         />
         <Suspense fallback={null}>
-          <Experience setModalContent={setModalContent} roverRef={roverRef} infoZones={infoZones} />
+          <Experience
+            setModalContent={setModalContent}
+            roverRef={roverRef}
+            infoZones={infoZones}
+          />
         </Suspense>
       </Canvas>
 
-      {modalContent && <InfoModal zone={modalContent} onClose={() => setModalContent(null)} />}
+      {modalContent && (
+        <InfoModal zone={modalContent} onClose={() => setModalContent(null)} />
+      )}
 
-      {showInstructions && <InstructionsModal onClose={() => setShowInstructions(false)} />}
+      {showInstructions && (
+        <InstructionsModal onClose={() => setShowInstructions(false)} />
+      )}
     </div>
   );
 }

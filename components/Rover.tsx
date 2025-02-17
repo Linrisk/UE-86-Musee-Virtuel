@@ -1,27 +1,27 @@
 "use client";
-
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
-
-interface ModalContent {
-  title: string;
-  description: string;
-  image?: string;
-  yearRange?: string;
-}
+import { ModalContent, InfoZoneData } from "../src/types/index.ts";
 
 interface RoverProps {
   setModalContent: (content: ModalContent) => void;
   roverRef: React.RefObject<THREE.Group>;
-  infoZones: Array<{ position: [number, number, number]; message: string }>;
+  infoZones: InfoZoneData[];
+  position?: [number, number, number];
 }
 
-const Rover: React.FC<RoverProps> = ({ setModalContent, roverRef, infoZones }) => {
+const Rover: React.FC<RoverProps> = ({ 
+  setModalContent, 
+  roverRef, 
+  infoZones,
+  position = [0, 0, 0]
+}) => {
   const { scene } = useGLTF("/robot.glb");
-  const speed = 0.2;
+  const speed = 0.1;
   const rotationSpeed = 0.05;
+  
   const keys = useRef<{ [key: string]: boolean }>({
     z: false,
     s: false,
@@ -29,7 +29,8 @@ const Rover: React.FC<RoverProps> = ({ setModalContent, roverRef, infoZones }) =
     d: false,
     " ": false,
   });
-  const [currentZone, setCurrentZone] = useState<{ position: [number, number, number]; message: string } | null>(null);
+
+  const [currentZone, setCurrentZone] = useState<InfoZoneData | null>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -71,7 +72,6 @@ const Rover: React.FC<RoverProps> = ({ setModalContent, roverRef, infoZones }) =
         roverRef.current.position.x -= Math.sin(roverRef.current.rotation.y) * speed;
         roverRef.current.position.z -= Math.cos(roverRef.current.rotation.y) * speed;
       }
-
       if (keys.current.q) {
         roverRef.current.rotation.y += rotationSpeed;
       }
@@ -81,9 +81,12 @@ const Rover: React.FC<RoverProps> = ({ setModalContent, roverRef, infoZones }) =
 
       let nearestZone = null;
       let minDistance = Number.POSITIVE_INFINITY;
+
       infoZones.forEach((zone) => {
         if (roverRef.current) {
-          const distance = roverRef.current.position.distanceTo(new THREE.Vector3(...zone.position));
+          const distance = roverRef.current.position.distanceTo(
+            new THREE.Vector3(...zone.position)
+          );
           if (distance < 2 && distance < minDistance) {
             nearestZone = zone;
             minDistance = distance;
@@ -95,7 +98,14 @@ const Rover: React.FC<RoverProps> = ({ setModalContent, roverRef, infoZones }) =
     }
   });
 
-  return <primitive ref={roverRef} object={scene} scale={0.5} />;
+  return (
+    <primitive 
+      ref={roverRef} 
+      object={scene} 
+      scale={0.5} 
+      position={position}
+    />
+  );
 };
 
 export default Rover;

@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
-import { Text } from '@react-three/drei';
-import { useThree } from '@react-three/fiber';
-import * as THREE from 'three';
+import React, { useState } from "react";
+import { Text } from "@react-three/drei";
+import { useThree } from "@react-three/fiber";
+import * as THREE from "three";
 
-const FuturisticHall = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
+interface FuturisticHallProps {
+  position?: [number, number, number];
+  rotation?: [number, number, number];
+}
+
+const FuturisticHall: React.FC<FuturisticHallProps> = ({
+  position = [0, 0, 0],
+  rotation = [0, 0, 0],
+}) => {
   const [showWelcome, setShowWelcome] = useState(true);
   const { camera } = useThree();
 
@@ -12,46 +20,92 @@ const FuturisticHall = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
     camera.lookAt(new THREE.Vector3(position[0], position[1], position[2]));
   }, [position, camera]);
 
-  const WelcomeModal = () => (
+  const WelcomeModal = () =>
     showWelcome && (
-      <group 
+      <group
         position={[position[0], position[1] + 2, position[2] - 5]}
-        rotation={rotation}
+        rotation={new THREE.Euler(rotation[0], rotation[1], rotation[2])}
       >
         <mesh>
           <planeGeometry args={[6, 4]} />
-          <meshPhysicalMaterial color="#ffffff" metalness={0.3} roughness={0.4} transparent opacity={0.9} />
+          <meshPhysicalMaterial
+            color="#ffffff"
+            metalness={0.3}
+            roughness={0.4}
+            transparent
+            opacity={0.9}
+          />
         </mesh>
-        <Text position={[0, 1, 0.1]} fontSize={0.4} color="#00fff2" anchorX="center" anchorY="middle">
+        <Text
+          position={[0, 1, 0.1]}
+          fontSize={0.4}
+          color="#00fff2"
+          anchorX="center"
+          anchorY="middle"
+        >
           Bienvenue au Musée du Futur
         </Text>
-        <Text position={[0, 0, 0.1]} fontSize={0.2} color="#333333" anchorX="center" anchorY="middle" maxWidth={4}>
+        <Text
+          position={[0, 0, 0.1]}
+          fontSize={0.2}
+          color="#333333"
+          anchorX="center"
+          anchorY="middle"
+          maxWidth={4}
+        >
           Embarquez pour un voyage à travers le temps et l'espace
         </Text>
         <group position={[0, -1, 0.1]} onClick={() => setShowWelcome(false)}>
           <mesh>
             <boxGeometry args={[2, 0.5, 0.1]} />
-            <meshStandardMaterial color="#00fff2" emissive="#00fff2" emissiveIntensity={0.5} />
+            <meshStandardMaterial
+              color="#00fff2"
+              emissive="#00fff2"
+              emissiveIntensity={0.5}
+            />
           </mesh>
-          <Text position={[0, 0, 0.1]} fontSize={0.2} color="#000000" anchorX="center" anchorY="middle">
+          <Text
+            position={[0, 0, 0.1]}
+            fontSize={0.2}
+            color="#000000"
+            anchorX="center"
+            anchorY="middle"
+          >
             Commencer la visite
           </Text>
         </group>
       </group>
-    )
-  );
+    );
+
+  const displayPositions: [number, number, number][] = [
+    [-8, 4, -5],
+    [8, 4, -5],
+    [-8, 4, 5],
+    [8, 4, 5],
+  ];
 
   return (
-    <group position={position} rotation={rotation}>
+    <group
+      position={position}
+      rotation={new THREE.Euler(rotation[0], rotation[1], rotation[2])}
+    >
       <WelcomeModal />
 
       <mesh position={[0, 20, 0]}>
         <icosahedronGeometry args={[25, 2]} />
-        <meshPhysicalMaterial color="#6600ff" metalness={0.4} roughness={0.2} transparent opacity={0.3} side={THREE.DoubleSide} envMapIntensity={1} />
+        <meshPhysicalMaterial
+          color="#6600ff"
+          metalness={0.4}
+          roughness={0.2}
+          transparent
+          opacity={0.3}
+          side={THREE.DoubleSide}
+          envMapIntensity={1}
+        />
       </mesh>
 
       {[-15, 0, 15].map((x, index) => (
-        <group key={index} position={[x, 0, 0]}>
+        <group key={index} position={new THREE.Vector3(x, 0, 0)}>
           <mesh>
             <torusGeometry args={[10, 0.5, 16, 100, Math.PI]} />
             <meshStandardMaterial
@@ -65,8 +119,8 @@ const FuturisticHall = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
         </group>
       ))}
 
-      {[[-8, 4, -5], [8, 4, -5], [-8, 4, 5], [8, 4, 5]].map((pos, index) => (
-        <group key={index} position={pos}>
+      {displayPositions.map((pos, index) => (
+        <group key={index} position={new THREE.Vector3(...pos)}>
           <mesh>
             <planeGeometry args={[4, 6]} />
             <meshPhysicalMaterial
@@ -88,7 +142,7 @@ const FuturisticHall = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
         <mesh
           key={index}
           rotation={[-Math.PI / 2, 0, 0]}
-          position={[0, 0.02, 0]}
+          position={new THREE.Vector3(0, 0.02, 0)}
         >
           <ringGeometry args={[radius, radius + 0.2, 6]} />
           <meshStandardMaterial

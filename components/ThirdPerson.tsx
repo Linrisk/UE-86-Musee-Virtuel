@@ -11,8 +11,7 @@ const ThirdPersonCamera: React.FC<ThirdPersonCameraProps> = ({ target }) => {
 
   useFrame(() => {
     if (target.current) {
-      // Ajustez l'offset pour écarter la caméra du personnage
-      const offset = new THREE.Vector3(0, 3, 8); // Augmentez la valeur de Z pour écarter la caméra
+      const offset = new THREE.Vector3(0, 3, 8); 
       const targetPosition = target.current.position.clone().add(offset);
       camera.position.lerp(targetPosition, 0.1);
       camera.lookAt(target.current.position);
